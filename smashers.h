@@ -19,10 +19,10 @@ typedef enum franchize_t {
 	WARIO = 15,
 	METAL_GEAR = 16,
 	SONIC = 17,
-	PIKMIN = 18,
+	PIKMIN = 18, // needs help
 	ROB = 19,
 	AC = 20,
-	MEGA_MAN = 21,
+	MEGA_MAN = 21, // needs help
 	WIIFIT = 22,
 	PUNCH_OUT = 23,
 	PACMAN = 24,
@@ -31,15 +31,18 @@ typedef enum franchize_t {
 	FF = 27,
 	BAYONETTA = 28,
 	SPLATOON = 29,
-	CASTLEVANIA = 30,
+	CASTLEVANIA = 30, // needs help
 	PERSONA = 31,
 	DQ = 32,
-	BANJO_KAZOOIE = 33,
-	ARMS = 34,
+	BANJO_KAZOOIE = 33, // needs help
+	ARMS = 34, // needs LOTS OF help
 	MC = 35,
-	XENOBLADE = 36,
+	XENOBLADE = 36, // needs help
 	FATAL_FURY = 37,
 } franchize_t;
+
+const int N_FRANCHIZE = 38;
+
 typedef struct smasher_t {
 	const char* name;
 	franchize_t franchize;
