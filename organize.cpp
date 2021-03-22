@@ -112,6 +112,7 @@ void clearScreen() {
 }
 
 void printMessage(char* string) {
+  serial("%d\n", strlen(string));
   setCursor(0, 0);
   clearScreen();
   std::vector<char*> words{};
@@ -120,7 +121,6 @@ void printMessage(char* string) {
     string = nullptr;
     sum += strlen(word);
     words.push_back(strdup(word));
-    serial("%s: %d, accumulated %d\n", word, strlen(word), words.size());
   }
   if (canFitWithWrap(words, true)) {
     drawWithWrap(words, true);
