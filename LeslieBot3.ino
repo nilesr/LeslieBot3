@@ -3,6 +3,8 @@
 #include "organize.h"
 #include "smashers.h"
 #include "assets/logos.h"
+#define DEFINE_SELECTORS 1
+#include "random.h"
 
 
 LiquidCrystal_I2C lcd(0x27,20,4);
@@ -34,6 +36,17 @@ void loadLogo(franchize_t franchize) {
   }
 }
 
+int random() {
+  int r = RANDOM_REG32;
+  if (r < 0) {
+    r = -r;
+  }
+  return r;
+}
+
+char* message;
+bool on_startup_screen = true;
+long lastUpdated;
 
 void setup() {
   Serial.begin(115200);
@@ -43,18 +56,38 @@ void setup() {
   //lcd.cursor();
   //lcd.blink();
 
+  pinMode(D8, INPUT);
+  pinMode(D7, INPUT);
+
+
   initLogos();
   loadLogo(SMASH);
 
-  printMessage("Hello, world! And some more text to force it to wrap");
+  message = strdup("Welcome to LeslieBot 3");
+  lastUpdated = millis();
 
   
 }
 
 
 void loop() {
-  static int f = 1;
-  loadLogo((franchize_t)(f++ % N_FRANCHIZE));
-  printMessage("Hello, world! And some more text to force it to wrap");
-  delay(1000);
+  const bool smash = digitalRead(D7);
+  const bool sans = digitalRead(D8);
+  if (smash || sans) {
+    on_startup_screen = false;
+    if (smash) {
+      free(message);
+      message = random_challenge();
+    } else {
+      free(message);
+      message = strdup("Trivia coming soon");
+    }
+    printMessage(message);
+  }
+  if (on_startup_screen && millis() - lastUpdated > 1000) {
+    lastUpdated = millis();
+    static int f = 1;
+    loadLogo((franchize_t)(f++ % N_FRANCHIZE));
+    printMessage(message);
+  }
 }

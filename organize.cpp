@@ -112,7 +112,7 @@ void clearScreen() {
 }
 
 void printMessage(char* string) {
-  serial("%d\n", strlen(string));
+  string = strdup(string);
   setCursor(0, 0);
   clearScreen();
   std::vector<char*> words{};
@@ -134,4 +134,5 @@ void printMessage(char* string) {
   } else {
     drawWord("Too long! Giving up");
   }
+  free(string);
 }

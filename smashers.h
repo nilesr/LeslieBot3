@@ -48,7 +48,8 @@ typedef struct smasher_t {
 	franchize_t franchize;
 } smasher_t;
 
-const smasher_t smashers[] = {
+const int N_SMASHERS = 82;
+const smasher_t smashers[N_SMASHERS] = {
 	{"Mario", MARIO},
 	{"Donkey Kong", DK},
 	{"Link", ZELDA},
