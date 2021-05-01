@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-f = [x for x in open("/home/niles/trivia", "r").read().split("\n") if x != ""]
+f = [x for x in open("trivia", "r").read().split("\n") if x != ""]
 l = []
 l.append("#pragma once")
 l.append("")
