@@ -23,3 +23,4 @@ extern selector_t SELECTORS[N_SELECTOR];
 #endif
 
 char* random_challenge();
+char* random_trivia();

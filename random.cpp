@@ -1,5 +1,6 @@
 #include "random.h"
 #include <string.h>
+#include "trivia/trivia.h"
 
 void loadLogo(franchize_t franchize);
 
@@ -27,4 +28,10 @@ char* random_challenge() {
 	}
 	serial("Using randomizer at index %d\r\n", i);
 	return (*SELECTORS[i].randomizer)();
+}
+
+char* random_trivia() {
+	loadLogo(SMASH);
+	// TODO this wil not be the final implementation
+	return strdup(trivia[(random() % N_TRIVIA)]);
 }

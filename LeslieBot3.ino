@@ -63,6 +63,8 @@ void setup() {
   initLogos();
   loadLogo(SMASH);
 
+  // TODO: Shuffle trivia
+
   message = strdup("Welcome to LeslieBot 3");
   lastUpdated = millis();
 
@@ -80,7 +82,7 @@ void loop() {
       message = random_challenge();
     } else {
       free(message);
-      message = strdup("Trivia coming soon");
+      message = random_trivia();
     }
     printMessage(message);
   }

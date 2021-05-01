@@ -15,8 +15,9 @@ bool canFitWithWrap(const std::vector<char*>& words, bool withLogo) {
   for (const auto& word : words) {
     int maxl = (withLogo && l > 1) ? 17 : 20;
     const int wl = strlen(word);
-    if (ll + 1 + wl < maxl) {
-      ll += 1 + wl;
+    const int sadj = ll == 0 ? 0 : 1;
+    if (ll + sadj + wl < maxl) {
+      ll += sadj + wl;
     } else {
       l++;
       ll = wl;
@@ -34,16 +35,18 @@ void drawWithWrap(const std::vector<char*>& words, bool withLogo) {
   for (const auto& word : words) {
     int maxl = (withLogo && l > 1) ? 17 : 20;
     const int wl = strlen(word);
-    if (ll + 1 + wl < maxl) {
-      ll += 1 + wl;
+    const int sadj = ll == 0 ? 0 : 1;
+    if (ll + sadj + wl < maxl) {
+      ll += sadj + wl;
+      if (sadj) {
+	drawChar(' ');
+      }
       drawWord(word);
-      drawChar(' ');
     } else {
       l++;
       ll = wl;
       setCursor(0, l);
       drawWord(word);
-      drawChar(' ');
     }
   }
 }
@@ -79,6 +82,12 @@ void drawNoWrap(const std::vector<char*>& words) {
     }
     if (i != words.size() - 1) {
       drawChar(' ');
+      ll++;
+      if (ll == 20) {
+	ll = 0;
+	l++;
+	setCursor(0, l);
+      }
     }
   }
 }
