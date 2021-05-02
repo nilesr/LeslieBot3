@@ -6,6 +6,7 @@
 #define DEFINE_SELECTORS 1
 #include "random.h"
 
+void loopDebug();
 
 LiquidCrystal_I2C lcd(0x27,20,4);
 
@@ -47,6 +48,7 @@ int random() {
 char* message;
 bool on_startup_screen = true;
 long lastUpdated;
+bool debug = true;
 
 void setup() {
   Serial.begin(115200);
@@ -58,21 +60,31 @@ void setup() {
 
   pinMode(D8, INPUT);
   pinMode(D7, INPUT);
+  // doesn't work right now for some reason
+  debug = digitalRead(D7) && digitalRead(D8);
 
 
   initLogos();
   loadLogo(SMASH);
 
-  // TODO: Shuffle trivia
+  if (!debug) {
+    // TODO: Shuffle trivia    
+    message = strdup("Welcome to LeslieBot 3");
+  } else {
+    message = strdup("Welcome to LeslieBot 3 (Debug Mode)");    
+  }
+  printMessage(message);
 
-  message = strdup("Welcome to LeslieBot 3");
   lastUpdated = millis();
 
   
 }
 
-
 void loop() {
+  if (debug) {
+    loopDebug();
+    return;
+  }
   const bool smash = digitalRead(D7);
   const bool sans = digitalRead(D8);
   if (smash || sans) {
@@ -90,6 +102,31 @@ void loop() {
     lastUpdated = millis();
     static int f = 1;
     loadLogo((franchize_t)(f++ % N_FRANCHIZE));
+    printMessage(message);
+  }
+}
+
+
+void loopDebug() {
+  static int dbgm = 0;
+  static int f = 0;
+  //static int i = 1;
+  const bool smash = digitalRead(D7);
+  const bool sans = digitalRead(D8);
+  if (smash || sans) {
+    dbgm = 1;
+    free(message);
+    message = strdup("The quick brown fox jumps over the lazy dog.");
+    printMessage(message);
+  }
+  if (millis() - lastUpdated > 750) {
+    lastUpdated = millis();
+    loadLogo((franchize_t)(f++ % N_FRANCHIZE));
+    if (dbgm) {
+      char* nmsg = nrprintf("%s %s", message, "four");
+      free(message);
+      message = nmsg;
+    }
     printMessage(message);
   }
 }
