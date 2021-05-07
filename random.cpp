@@ -1,5 +1,6 @@
 #include "random.h"
 #include <string.h>
+#define DEFINE_TRIVIA 1
 #include "trivia/trivia.h"
 
 void loadLogo(franchize_t franchize);
@@ -20,7 +21,7 @@ char* random_challenge() {
 	for (int i = 0; i < N_SELECTOR; i++) {
 		sum_weights += SELECTORS[i].weight;
 	}
-    int rand = random() % sum_weights;
+  int rand = random() % sum_weights;
 	int i = 0;
 	while (rand >= SELECTORS[i].weight) {
 		rand -= SELECTORS[i].weight;
@@ -33,5 +34,5 @@ char* random_challenge() {
 char* random_trivia() {
 	loadLogo(SMASH);
 	// TODO this wil not be the final implementation
-	return strdup(trivia[(random() % N_TRIVIA)]);
+	return strdup(String{trivia(random() % N_TRIVIA)}.c_str());
 }

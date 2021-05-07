@@ -3,6 +3,7 @@
 #include "organize.h"
 #include "smashers.h"
 #include "assets/logos.h"
+#include "trivia/trivia.h"
 #define DEFINE_SELECTORS 1
 #include "random.h"
 
@@ -67,11 +68,10 @@ void setup() {
   initLogos();
   loadLogo(SMASH);
 
-  if (!debug) {
-    // TODO: Shuffle trivia    
-    message = strdup("Welcome to LeslieBot 3");
+  if (debug) {
+    message = strdup("Welcome to LeslieBot 3 (Debug Mode)");
   } else {
-    message = strdup("Welcome to LeslieBot 3 (Debug Mode)");    
+    message = strdup("Welcome to LeslieBot 3");
   }
   printMessage(message);
 
@@ -102,6 +102,26 @@ void loop() {
     lastUpdated = millis();
     static int f = 1;
     loadLogo((franchize_t)(f++ % N_FRANCHIZE));
+    if (f % N_FRANCHIZE == 0) {
+      switch ((f / N_FRANCHIZE) % 4) {
+        case 0:
+          free(message);
+          message = strdup("Welcome to LeslieBot 3");
+          break;
+        case 1:
+          free(message);
+          message = nrprintf("Welcome to LeslieBot 3. I'm aware of %d smash characters", N_SMASHERS);
+          break;
+        case 2:
+          free(message);
+          message = nrprintf("Welcome to LeslieBot 3. I know %d trivia messages", N_TRIVIA);
+          break;
+        case 3:
+          free(message);
+          message = nrprintf("Welcome to LeslieBot 3. I have %d possible randomizers", N_SELECTOR);
+          break;
+      }
+    }
     printMessage(message);
   }
 }
