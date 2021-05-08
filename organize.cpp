@@ -122,6 +122,7 @@ void clearScreen() {
 
 void printMessage(char* string) {
   string = strdup(string);
+  char* os = string;
   setCursor(0, 0);
   clearScreen();
   std::vector<char*> words{};
@@ -129,7 +130,7 @@ void printMessage(char* string) {
   while (char* word = strtok(string, " ")) {
     string = nullptr;
     sum += strlen(word);
-    words.push_back(strdup(word));
+    words.push_back(word);
   }
   if (canFitWithWrap(words, true)) {
     drawWithWrap(words, true);
@@ -143,5 +144,5 @@ void printMessage(char* string) {
   } else {
     drawWord("Too long! Giving up");
   }
-  free(string);
+  free(os);
 }

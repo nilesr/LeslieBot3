@@ -105,7 +105,7 @@ char* cant_look_sans() {
 char* random_smasher_horizontal_exact() {
   const int offset = (random() % 7) + 1;
   const char* direction = (random() % 2) == 0 ? "left" : "right";
-  return nrprintf("Play the character %d to the %s from whoever you last played as", direction, offset);
+  return nrprintf("Play the character %d to the %s from whoever you last played as", offset, direction);
 }
 
 char* therapy() {
@@ -137,7 +137,7 @@ char* zelda_arm_wrestling() {
 }
 
 char* midpoint_enemies() {
-  return strdup("Play someone in the middle of the characters who would not like each other");
+  return strdup("Play someone in the middle of two characters who would not like each other");
 }
 
 char* leslie() {
