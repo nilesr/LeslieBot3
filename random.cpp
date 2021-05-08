@@ -2,6 +2,7 @@
 #include <string.h>
 #define DEFINE_TRIVIA 1
 #include "trivia/trivia.h"
+#include <algorithm>
 
 void loadLogo(franchize_t franchize);
 
@@ -27,9 +28,23 @@ char* random_challenge() {
 }
 
 char* random_trivia() {
+  static bool shuffled = false;
+  static int order[N_TRIVIA];
+  if (!shuffled) {
+    for (int i = 0; i < N_TRIVIA; i++) {
+      order[i] = i;
+    }    
+    for (int c = 0; c < N_TRIVIA * 10; c++) {
+      int i = random() % N_TRIVIA;
+      int j = random() % N_TRIVIA;
+      std::swap(order[i], order[j]);
+    }
+    shuffled = true;
+  }
+  static int idx = 0;
   loadLogo(SMASH);
-  // TODO this wil not be the final implementation
-  return strdup(String{trivia(random() % N_TRIVIA)}.c_str());
+  String s{trivia(order[idx++ % N_TRIVIA])};
+  return strdup(s.c_str());
 }
 
 char* random_smasher() {
