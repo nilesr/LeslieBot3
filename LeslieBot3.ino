@@ -49,7 +49,7 @@ int random() {
 char* message;
 bool on_startup_screen = true;
 long lastUpdated;
-bool debug = true;
+bool debug = false;
 
 void setup() {
   Serial.begin(115200);
@@ -61,18 +61,12 @@ void setup() {
 
   pinMode(D8, INPUT);
   pinMode(D7, INPUT);
-  // doesn't work right now for some reason
-  debug = digitalRead(D7) && digitalRead(D8);
 
 
   initLogos();
   loadLogo(SMASH);
 
-  if (debug) {
-    message = strdup("Welcome to LeslieBot 3 (Debug Mode)");
-  } else {
-    message = strdup("Welcome to LeslieBot 3");
-  }
+  message = strdup("Welcome to LeslieBot 3");
   printMessage(message);
 
   lastUpdated = millis();
@@ -87,6 +81,15 @@ void loop() {
   }
   const bool smash = digitalRead(D7);
   const bool sans = digitalRead(D8);
+  if (smash && sans) {
+    debug = true;
+    on_startup_screen = true;
+    free(message);
+    message = strdup("Welcome to LeslieBot 3 (Debug mode)");
+    printMessage(message);
+    while (digitalRead(D7) || digitalRead(D8));
+    return;
+  }
   if (smash || sans) {
     on_startup_screen = false;
     if (smash) {
@@ -130,20 +133,25 @@ void loop() {
 void loopDebug() {
   static int dbgm = 0;
   static int f = 0;
-  //static int i = 1;
+  static int i = 1;
   const bool smash = digitalRead(D7);
   const bool sans = digitalRead(D8);
   if (smash || sans) {
     dbgm = 1;
-    free(message);
-    message = strdup("The quick brown fox jumps over the lazy dog.");
-    printMessage(message);
   }
   if (millis() - lastUpdated > 750) {
     lastUpdated = millis();
     loadLogo((franchize_t)(f++ % N_FRANCHIZE));
-    if (dbgm) {
-      char* nmsg = nrprintf("%s %s", message, "four");
+    if (dbgm == 1) {
+      i++;
+      if (i % 20 == 0) {
+        free(message);
+        message = strdup("Welcome to LeslieBot 3 (Debug mode)");
+      }
+      static const char* const dls[5] = {
+        "four", "three", "two", "a", "abcdefgh"
+      };
+      char* nmsg = nrprintf("%s %s", message, dls[(i / 20) % 5]);
       free(message);
       message = nmsg;
     }
